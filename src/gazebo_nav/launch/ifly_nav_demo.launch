@@ -1,0 +1,28 @@
+<launch>
+		
+    
+    <!-- 运行地图服务器，并且加载设置的地图-->
+    <arg name="map" default="610.yaml" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find gazebo_nav)/maps/$(arg map)" output="screen"/>
+
+    <!-- 运行move_base节点 -->
+    <include file="$(find gazebo_nav)/launch/move_base.launch"/>
+    <!-- 启动AMCL节点 -->
+    <include file="$(find gazebo_nav)/launch/amcl.launch" />
+   
+    <!--node name="amcl_service" pkg="rosservice" type="rosservice" args="call /global_localization"/-->
+
+
+
+     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find gazebo_nav)/config/rviz.rviz" />
+
+
+
+  <include file="$(find ucar_controller)/launch/base_driver.launch" > </include>
+ 
+
+
+  <include file="$(find ydlidar)/launch/ydlidar.launch" > </include>
+  <include file="$(find robot_pose_ekf)/test/test_robot_pose_ekf.launch" > </include>
+  <!--node pkg="tf" type="static_transform_publisher" name="map_base_footprint" args="0 0 0 0 0 0 base_footprint base_link 1000" /--> 
+</launch>
